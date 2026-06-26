@@ -15,6 +15,8 @@
 
         public function cadastrar(){
 
+        try{
+
             $query = "INSERT INTO " . $this->table_name . "(nome, email, telefone) VALUES (:nome, :email, :telefone)";
 
             $stmt = $this->conn->prepare($query);
@@ -24,6 +26,36 @@
                 ":email" => $this->email,
                 ":telefone" => $this->telefone
             ]);
+
+        }catch(PDOException $e){
+
+            echo "Erro ao cadastrar usuário: " . $e->getMessage();
+
+        }
+
+            
+
+        }
+
+        public function listar(){
+
+        try{
+            
+            $query = "SELECT id, nome, telefone, email FROM " . $this->table_name;
+
+            $stmt_listar = $this->conn->prepare($query);
+
+            $stmt_listar->execute();
+
+            $lista = $stmt_listar->fetchAll(PDO::FETCH_ASSOC);
+
+            return $lista;
+
+        }catch(PDOException $e){
+            
+            die("Erro ao carregar a lista de usuário: " . $e->getMessage());
+
+        }
 
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-    // require_once "actions/listar.php";
+    require_once "actions/listar.php";
 
 ?>
 
@@ -36,24 +36,21 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($usuarios as $usuario): ?>
-                    <tr>
-                        <td><?= $usuario['id'] ?></td>
-                        <td><?= $usuario['nome'] ?></td>
-                        <td><?= $usuario['email'] ?></td>
-                        <td><?= $usuario['telefone'] ?></td>
-                        <td id="botoes" style="display: flex; gap: 10px;">
-                            <form action="editar.php" method="GET">
-                                <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
-                                <input type="submit" class="btn btn-primary" value="Editar">
-                            </form>
-                            <form action="actions/deletar.php" method="POST">
-                                <input type="hidden" name="id" value="<?= $usuario['id'] ?>" onclick="return confirm('Tem certeza que deseja ecluir este usuário?')">
-                                <input type="submit" class="btn btn-danger" value="Deletar"  onclick="return confirm('Tem certeza que deseja ecluir este usuário?')">
-                            </form>                            
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+                <?php if(!empty($usuarios)): ?>
+                    <?php foreach($usuarios as $row): ?>
+                        <tr>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['nome']; ?></td>
+                            <td><?php echo $row['email']; ?></td>
+                            <td><?php echo $row['telefone']; ?></td>
+                            <td>
+                            <a href="editar.php?id=<?php echo $row['id']; ?>">Editar</a>
+                            <a href="actions/deletar.php?id=<?php echo $row['id']; ?>">Deletar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                <?php endif; ?>
             </tbody>
         </table>
     <?php else: ?>
