@@ -59,4 +59,26 @@
 
         }
 
+        public function deletar(){
+            
+            try{
+
+                $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+
+                $stmt_deletar = $this->conn->prepare($query);
+
+                $stmt_deletar->execute([
+                    ":id" => $this->id
+                ]);
+
+                return true;
+
+            }catch(PDOException $e){
+                echo "O usuário não pode ser deletado: " . $e->getMessage();
+
+                return false;
+            }
+
+        }
+
     }

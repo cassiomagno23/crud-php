@@ -44,8 +44,8 @@
                             <td><?php echo $row['email']; ?></td>
                             <td><?php echo $row['telefone']; ?></td>
                             <td>
-                            <a href="editar.php?id=<?php echo $row['id']; ?>">Editar</a>
-                            <a href="actions/deletar.php?id=<?php echo $row['id']; ?>">Deletar</a>
+                            <a href="editar.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">Editar</a>
+                            <a href="actions/deletar.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Deletar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
