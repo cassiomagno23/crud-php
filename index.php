@@ -1,6 +1,6 @@
 <?php
 
-    require_once "actions/listar.php";
+    // require_once "actions/listar.php";
 
 ?>
 
