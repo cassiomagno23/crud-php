@@ -1,37 +1,32 @@
 <?php
-include_once "config/connection.php";
 
-// Só processa se o formulário do editar.php tiver sido enviado
-if (isset($_POST['atualizar'])) {
-    $id = $_POST['id'];
-    $nome = $_POST['nome'];
-    $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
+    require_once "../classes/Database.php";
+    require_once "../classes/Usuario.php";
 
-   try {
+    if(isset($_POST['id'])){
+        
+        $database = new Database();
+        $db = $database->getConnection();
+    
+        $usuario = new Usuario($db);
 
-        $query = "UPDATE usuarios SET nome = :nome, email = :email, telefone = :telefone WHERE id = :id";
-        $stmt_atualizar = $conn->prepare($query);
+        $usuario->id = $_POST['id'];
+        $usuario->nome = $_POST['nome'];
+        $usuario->email = $_POST['email'];
+        $usuario->telefone = $_POST['telefone'];
 
-        $atualizou = $stmt_atualizar->execute([
-            ":id" => $id,
-            ":nome" => $nome,
-            ":email" => $email,
-            ":telefone" => $telefone,
-        ]);
+        if($usuario->atualizar()){
 
-        if ($atualizou) {
-            // Sucesso! Volta para a página principal
-            header("Location: index.php?atualizado=true");
-            exit;
-        } else {
-            echo "Erro ao atualizar o usuário.";
+            header("Location: ../index.php?atualizado=true");
+            exit();
+
+        }else{
+
+            echo "Erro ao atualizar usuário.";
         }
-   }catch(PDOException){
-        echo "Infelizmente ocorreu um erro ao salvar as alterações: " . $e->getMessage();
-   }
-} else {
-    // Se alguém tentar acessar esse arquivo direto pelo navegador, joga de volta pro index
-    header("Location: index.php");
-    exit;
-}
+    }else {
+            // Se alguém tentar acessar esse arquivo direto pelo navegador, manda de volta
+            header("Location: ../index.php");
+            exit();
+    }
+

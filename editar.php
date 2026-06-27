@@ -1,5 +1,23 @@
 <?php
-    require_once "actions/buscar_usuario.php";
+
+    require_once "classes/Database.php";
+    require_once "classes/Usuario.php";
+
+    if(!isset($_GET['id'])){
+        header("Location: index.php");
+        exit();
+    }
+
+    $database = new Database();
+    $db = $database->getConnection();
+
+    $usuario = new Usuario($db);
+    $usuario->id = $_GET['id'];
+
+    if(!$usuario->buscar()){
+        die("Usuario não encontrado");
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -19,18 +37,18 @@
     <a href="index.php" class="btn btn-dark">Início</a>
     <br><br>
 
-    <form action="actions/atualizar.php" method="POST">
+    <form action="./actions/atualizar.php" method="POST">
         
-        <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
+        <input type="hidden" name="id" value="<?= $usuario->id ?>">
 
         <label>Nome:</label><br>
-        <input type="text" name="nome" value="<?= $usuario['nome'] ?>" required><br><br>
+        <input type="text" name="nome" value="<?= $usuario->nome ?>" required><br><br>
 
         <label>E-mail:</label><br>
-        <input type="email" name="email" value="<?= $usuario['email'] ?>" required><br><br>
+        <input type="email" name="email" value="<?= $usuario->email ?>" required><br><br>
 
         <label>Telefone:</label><br>
-        <input type="text" name="telefone" value="<?= $usuario['telefone'] ?>" required><br><br>
+        <input type="text" name="telefone" value="<?= $usuario->telefone ?>" required><br><br>
 
         <input type="submit" name="atualizar" value="Salvar Alterações">
     </form>

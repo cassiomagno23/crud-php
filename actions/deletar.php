@@ -1,33 +1,27 @@
 <?php
 
-    include_once "config/connection.php";
+    require_once "../classes/Database.php";
+    require_once "../classes/Usuario.php";
 
-    if(isset($_POST['id'])){
-        $id = $_POST['id'];
+    if(isset($_GET['id'])){
 
-        
-        try{
+        $database = new Database();
+        $db = $database->getConnection();
 
-            $stmt_deletar = $conn->prepare("DELETE FROM usuarios WHERE id = :id");
-            $executou = $stmt_deletar->execute([
-                ":id" => $id
-            ]);
+        $usuario = new Usuario($db);
 
-            if($executou){
-                header("Location: index.php");
-                exit;
-            } else {
-                echo "Erro ao deletar o usuário";
-            }
+        $usuario->id = $_GET['id'];
 
-        }catch(PDOException $e){
-            
-            die("Erro ao deletar um cadastro: " . $e->getMessage());
-
+        if ($usuario->deletar()) {
+            // Se der certo, volta para a página principal
+            header("Location: ../index.php?deletado=true");
+            exit();
+        } else {
+            echo "Erro ao tentar deletar o usuário.";
         }
 
-        header("Location: index.php");
-        exit;
-
+    }else {
+    // Se tentarem acessar o arquivo direto sem passar um ID
+    header("Location: ../index.php");
+    exit();
     }
-    
