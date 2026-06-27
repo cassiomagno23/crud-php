@@ -1,16 +1,11 @@
 <?php
 
-    require_once "config/connection.php";
+    require_once "classes/Database.php";
+    require_once "classes/Usuario.php";
 
-    try{
-        $stmt_listar = $conn->prepare("SELECT id, nome, email, telefone FROM usuarios ORDER BY id ASC");
-        $stmt_listar->execute();
+    $database= new Database();
+    $db = $database->getConnection();
 
-        $usuarios = $stmt_listar->fetchAll(PDO::FETCH_ASSOC);
+    $usuario = new Usuario($db);
 
-    }catch(PDOExecute $e){
-        $usuarios = [];
-
-        echo "Erro ao listar contados: " . $e->getMesage();
-    }
-    
+    $usuarios = $usuario->listar();

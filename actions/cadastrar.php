@@ -1,30 +1,25 @@
 <?php
 
-    require_once "config/connection.php";
+    require_once "../classes/Database.php";
+    require_once "../classes/Usuario.php";
 
-    if(isset($_POST['registrar'])){
-        //CAPTURAR DADOS DO FORMULÁRIO
-        $nome = $_POST['nome'];
-        $email = $_POST['email'];
-        $telefone = $_POST['telefone'];
-        
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-     try{
-        $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, telefone) VALUES (:nome, :email, :telefone)");
-        
-        $stmt->execute([
-            ":nome" => $nome,
-            ":email" => $email,
-            ":telefone" => $telefone
-        ]);
+        $database = new Database();
+        $db = $database->getConnection();
 
-        header("Location: index.php?sucesso=true");
-        exit;
+        $usuario = new Usuario($db);
 
-    } catch (PDOException $e) {
+        $usuario->nome = $_POST['nome'];
+        $usuario->email = $_POST['email'];
+        $usuario->telefone = $_POST['telefone'];
 
-        echo "Infelizmente ocorreu um erro ao salvar: " . $e->getMessage(); 
-    }
+        try{
+            if($usuario->cadastrar());
+            header("Location: ../index.php?sucesso=true");
+            exit();
+        }catch(PDOException $e){
+            echo "Erro ao cadastroar usuário: " -> $e->getMessage();
+        }
 
     }
-
