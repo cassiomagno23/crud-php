@@ -81,4 +81,59 @@
 
         }
 
+        public function buscar(){
+            
+            try{
+
+                $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
+
+                $stmt_buscar = $this->conn->prepare($query);
+
+                $stmt_buscar->execute([
+                    ":id" => $this->id
+                ]);
+
+                $busca = $stmt_buscar->fetch(PDO::FETCH_ASSOC);
+
+                if($busca){
+                    $this->nome = $busca['nome'];
+                    $this->email = $busca['email'];
+                    $this->telefone = $busca['telefone'];
+
+                    return true;
+                }
+
+                return false;
+
+            }catch(PDOException $e){
+                echo "Erro ao buscar o usuario: " . $e->getMessage();
+                return false;
+            }
+
+        }
+
+        public function atualizar(){
+
+            try{
+
+                $query = "UPDATE " . $this->table_name . " SET nome = :nome, email = :email, telefone = :telefone WHERE id = :id";
+
+                $stmt_atualizar = $this->conn->prepare($query);
+
+                $atualizou = $stmt_atualizar->execute([
+                    ":nome" => $this->nome,
+                    ":email" => $this->email,
+                    ":telefone" => $this->telefone,
+                    ":id" => $this->id
+
+                ]);
+
+                return $atualizou;
+
+            }catch(PDOException $e){
+                die("Erro ao atualizar cadastro: " . $e->getMessage());
+            }
+
+        }
+
     }
