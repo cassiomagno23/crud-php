@@ -41,8 +41,14 @@ O projeto foi refatorado para separar a lógica de negócios da interface visual
 
 - **[R]ead** (Listar/Buscar): \* Listagem geral na página inicial renderizada através de um array de objetos trazidos por $usuario->listar().
 
-\*\*\*\* Busca individual de dados por ID ($usuario->buscar()) para auto-preencher os campos na tela de edição.
+----- └── Busca individual de dados por ID ($usuario->buscar()) para auto-preencher os campos na tela de edição.
 
 - **[U]pdate** (Editar): Processamento de alterações via $usuario->atualizar() de forma isolada e segura.
 
 - **[D]elete** (Excluir): Exclusão de registros do banco de dados disparada via GET com o método $usuario->deletar().
+
+## 🔒 Segurança e Tratamento de Erros
+
+Prepared Statements: Todas as queries **SQL (INSERT, SELECT, UPDATE, DELETE)** utilizam parâmetros nomeados (ex: :id, :nome) para blindar a aplicação contra ataques de SQL Injection.
+
+Blocos Try-Catch: Métodos críticos de banco de dados são envolvidos em estruturas try-catch capturando exceções do tipo PDOException, garantindo estabilidade ao sistema.
